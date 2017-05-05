@@ -7,9 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bluelinelabs.conductor.Controller;
+import com.bluelinelabs.conductor.RouterTransaction;
 
 public class HomeController extends Controller {
     private boolean isGrown = false;
+    private int conesCount = 42;
     private View tree;
 
     @NonNull
@@ -20,8 +22,12 @@ public class HomeController extends Controller {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                isGrown = true;
-                update();
+                if (isGrown) {
+                    getRouter().pushController(RouterTransaction.with(new ConeController(conesCount)));
+                } else {
+                    isGrown = true;
+                    update();
+                }
             }
         });
 
@@ -48,11 +54,13 @@ public class HomeController extends Controller {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("isGrown", isGrown);
+        outState.putInt("conesCount", conesCount);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         isGrown = savedInstanceState.getBoolean("isGrown");
+        conesCount = savedInstanceState.getInt("conesCount");
     }
 }

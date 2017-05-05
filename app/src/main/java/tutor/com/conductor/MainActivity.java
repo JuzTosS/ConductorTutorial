@@ -25,4 +25,11 @@ public class MainActivity extends AppCompatActivity {
             router.setRoot(RouterTransaction.with(new HomeController()));
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        if (!router.handleBack()) {
+            super.onBackPressed();
+        }
+    }
 }
