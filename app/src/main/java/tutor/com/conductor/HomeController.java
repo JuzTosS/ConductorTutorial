@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.bluelinelabs.conductor.Controller;
 
 public class HomeController extends Controller {
+    private boolean isGrown = false;
     private View tree;
 
     @NonNull
@@ -18,11 +19,22 @@ public class HomeController extends Controller {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tree.setVisibility(View.VISIBLE);
+                isGrown = true;
+                update();
             }
         });
 
         return view;
+    }
+
+    @Override
+    protected void onAttach(@NonNull View view) {
+        super.onAttach(view);
+        update();
+    }
+
+    private void update() {
+        tree.setVisibility(isGrown ? View.VISIBLE : View.GONE);
     }
 
     @Override
