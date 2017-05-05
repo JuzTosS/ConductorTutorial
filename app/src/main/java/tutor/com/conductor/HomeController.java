@@ -1,5 +1,6 @@
 package tutor.com.conductor;
 
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,5 +42,17 @@ public class HomeController extends Controller {
     protected void onDestroyView(@NonNull View view) {
         super.onDestroyView(view);
         tree = null;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("isGrown", isGrown);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        isGrown = savedInstanceState.getBoolean("isGrown");
     }
 }
