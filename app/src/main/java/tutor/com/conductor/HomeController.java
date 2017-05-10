@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.bluelinelabs.conductor.Controller;
 import com.bluelinelabs.conductor.RouterTransaction;
+import com.bluelinelabs.conductor.changehandler.FadeChangeHandler;
 
 public class HomeController extends Controller implements ConeController.ConeListener {
     private boolean isGrown = false;
@@ -23,7 +24,11 @@ public class HomeController extends Controller implements ConeController.ConeLis
             @Override
             public void onClick(View v) {
                 if (isGrown) {
-                    getRouter().pushController(RouterTransaction.with(new ConeController(conesCount, HomeController.this)));
+                    getRouter().pushController(RouterTransaction.with(
+                            new ConeController(conesCount, HomeController.this))
+                                .popChangeHandler(new FadeChangeHandler())
+                                .pushChangeHandler(new FadeChangeHandler())
+                    );
                 } else {
                     isGrown = true;
                     update();
