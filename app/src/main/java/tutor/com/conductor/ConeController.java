@@ -14,9 +14,10 @@ public class ConeController extends Controller {
     private int conesCount = 0;
     private TextView textField;
 
-    public ConeController(int conesCount) {
+    public <T extends Controller & ConeListener> ConeController(int conesCount, T listener) {
         this.conesCount = conesCount;
         getArgs().putInt("conesCount", conesCount);
+        setTargetController(listener);
     }
 
     public ConeController(@Nullable Bundle args) {
@@ -29,12 +30,34 @@ public class ConeController extends Controller {
     protected View onCreateView(@NonNull LayoutInflater inflater, @NonNull ViewGroup container) {
         View view = inflater.inflate(R.layout.controller_cone, container, false);
         textField = (TextView) view.findViewById(R.id.textField);
+
+        view.findViewById(R.id.collectConeButton)
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (getTargetController() != null) {
+                            conesCount--;
+                            getArgs().putInt("conesCount", conesCount);
+                            update();
+                        }
+                    }
+                });
         return view;
     }
 
     @Override
     protected void onAttach(@NonNull View view) {
         super.onAttach(view);
+        update();
+    }
+
+    @Override
+    public boolean handleBack() {
+        ((ConeListener) getTargetController()).conesLeft(conesCount);
+        return super.handleBack();
+    }
+
+    private void update() {
         textField.setText("Cones: " + conesCount);
     }
 
@@ -44,4 +67,7 @@ public class ConeController extends Controller {
         textField = null;
     }
 
+    public interface ConeListener {
+        void conesLeft(int count);
+    }
 }
